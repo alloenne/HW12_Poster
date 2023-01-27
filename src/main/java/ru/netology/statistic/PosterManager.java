@@ -1,40 +1,37 @@
 package ru.netology.statistic;
 
 public class PosterManager {
-    int maxSize = 10;
+    private PosterRepo repo;
+    private int maxSize = 10;
 
-    public PosterManager(int size) {
+    public PosterManager(PosterRepo repo, int size) {
+        this.repo = repo;
         maxSize = size;
     }
 
-    public PosterManager() {
+    public PosterManager(PosterRepo repo) {
+        this.repo = repo;
     }
 
-    private DataPoster[] posters = new DataPoster[0];
-
     public void save(DataPoster poster) {
-        DataPoster[] tmp = new DataPoster[posters.length + 1];
-        for (int i = 0; i < posters.length; i++) {
-            tmp[i] = posters[i];
-        }
-        tmp[tmp.length - 1] = poster;
-        posters = tmp;
+        repo.save(poster);
     }
 
     public DataPoster[] findAll() {
-        return posters;
+        return repo.findAll();
     }
 
     public DataPoster[] findLast() {
         int resultLength;
-        if (posters.length > maxSize) {
+        DataPoster[] all = repo.findAll();
+        if (all.length > maxSize) {
             resultLength = maxSize;
         } else {
-            resultLength = posters.length;
+            resultLength = all.length;
         }
         DataPoster[] result = new DataPoster[resultLength];
         for (int i = 0; i < resultLength; i++) {
-            result[i] = posters[posters.length - 1 - i];
+            result[i] = all[all.length - 1 - i];
         }
         return result;
     }

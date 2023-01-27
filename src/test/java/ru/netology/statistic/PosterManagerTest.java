@@ -1,9 +1,15 @@
 package ru.netology.statistic;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import static org.mockito.Mockito.*;
 
 public class PosterManagerTest {
+    PosterRepo repo = Mockito.mock(PosterRepo.class);
+
+    PosterManager manager = new PosterManager(repo);
     DataPoster film1 = new DataPoster(1, "Бладшот");
     DataPoster film2 = new DataPoster(2, "Вперед");
     DataPoster film3 = new DataPoster(3, "Отель");
@@ -18,69 +24,38 @@ public class PosterManagerTest {
 
     @Test
     public void shouldExist() {
-        PosterManager repo = new PosterManager();
-        repo.save(film1);
-        repo.save(film2);
-        repo.save(film3);
-        repo.save(film4);
-        repo.save(film5);
-        repo.save(film6);
-        repo.save(film7);
-        repo.save(film8);
-        repo.save(film9);
-        repo.save(film10);
-        repo.save(film11);
+        DataPoster[] all = {film1, film2, film3, film4, film5, film6, film7, film8, film9, film10, film11};
+        doReturn(all).when(repo).findAll();
         DataPoster[] expected = {film1, film2, film3, film4, film5, film6, film7, film8, film9, film10, film11};
-        DataPoster[] actual = repo.findAll();
+        DataPoster[] actual = manager.findAll();
         Assertions.assertArrayEquals(expected, actual);
     }
 
     @Test
     public void shouldMaxSize10() {
-        PosterManager repo = new PosterManager();
-        repo.save(film1);
-        repo.save(film2);
-        repo.save(film3);
-        repo.save(film4);
-        repo.save(film5);
-        repo.save(film6);
-        repo.save(film7);
-        repo.save(film8);
-        repo.save(film9);
-        repo.save(film10);
-        repo.save(film11);
+        DataPoster[] all = {film1, film2, film3, film4, film5, film6, film7, film8, film9, film10, film11};
+        doReturn(all).when(repo).findAll();
         DataPoster[] expected = {film11, film10, film9, film8, film7, film6, film5, film4, film3, film2};
-        DataPoster[] actual = repo.findLast();
+        DataPoster[] actual = manager.findLast();
         Assertions.assertArrayEquals(expected, actual);
     }
 
     @Test
     public void shouldMaxSize5() {
-        PosterManager repo = new PosterManager(5);
-        repo.save(film1);
-        repo.save(film2);
-        repo.save(film3);
-        repo.save(film4);
-        repo.save(film5);
-        repo.save(film6);
-        repo.save(film7);
-        repo.save(film8);
-        repo.save(film9);
-        repo.save(film10);
-        repo.save(film11);
+        PosterManager manager = new PosterManager(repo, 5);
+        DataPoster[] all = {film1, film2, film3, film4, film5, film6, film7, film8, film9, film10, film11};
+        doReturn(all).when(repo).findAll();
         DataPoster[] expected = {film11, film10, film9, film8, film7};
-        DataPoster[] actual = repo.findLast();
+        DataPoster[] actual = manager.findLast();
         Assertions.assertArrayEquals(expected, actual);
     }
 
     @Test
     public void shouldArrLessMaxSize() {
-        PosterManager repo = new PosterManager();
-        repo.save(film1);
-        repo.save(film2);
-        repo.save(film3);
+        DataPoster[] all = {film1, film2, film3};
+        doReturn(all).when(repo).findAll();
         DataPoster[] expected = {film3, film2, film1};
-        DataPoster[] actual = repo.findLast();
+        DataPoster[] actual = manager.findLast();
         Assertions.assertArrayEquals(expected, actual);
     }
 
