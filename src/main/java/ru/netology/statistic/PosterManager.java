@@ -1,7 +1,7 @@
 package ru.netology.statistic;
 
 public class PosterManager {
-    int maxSize = 10;
+    private int maxSize = 10;
 
     public PosterManager(int size) {
         maxSize = size;
